@@ -113,7 +113,6 @@ const App = () => {
     const renderFinalScore = (frame) => {
         if (frames[frame]) {
             if (frames[frame].frame_complete) {
-                // gameOver(frames[frame].score)
                 return frames[frame].score
             } else {
                 return "-";
@@ -130,10 +129,6 @@ const App = () => {
         setPlayerId('');
         setGameId('')
     }
-
-    // const gameOver = (score) => {
-    //     console.log("Game Over, Final Score: ", score)
-    // }
 
     return (
         <div>
@@ -202,8 +197,6 @@ const App = () => {
                     </tbody>
                 </table>
             </div>
-
-            {/* <div id='gameOver'></div> */}
         </div>
     );
 };
