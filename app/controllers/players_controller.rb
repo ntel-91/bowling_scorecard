@@ -2,7 +2,7 @@ class PlayersController < ApplicationController
     protect_from_forgery with: :null_session
 
     def create
-        player = Player.find(params[:playerId])
+        player = Player.find(params[:currentPlayerId])
         begin 
             frames = player.add_shot(params[:score])
             render json: {frames: frames, final_score: player.final_score}

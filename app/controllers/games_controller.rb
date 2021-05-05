@@ -3,6 +3,6 @@ class GamesController < ApplicationController
     def create
         game = Game.create
         player = Player.create(game_id: game.id, player_name: params[:playerName])
-        render json: player.attributes
+        render json: {game_id: game.id, players: game.players}
     end
 end

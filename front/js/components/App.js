@@ -4,11 +4,12 @@
 // import './App.css';
 import '../../css/app.scss';
 import React, { useState } from 'react';
+import Scoresheet from './Scoresheet';
 
 const App = () => {
     const [scoreInput, setScoreInput] = useState('');
     const [playerName, setPlayerName] = useState('');
-    const [playerId, setPlayerId] = useState('');
+    const [currentPlayerId, setCurrentPlayerId] = useState('');
     const [gameId, setGameId] = useState('');
     const [frames, setFrames] = useState([]);
 
@@ -27,7 +28,7 @@ const App = () => {
         .then(res => res.json())
         .then(function(data){
             console.log(data)
-            setPlayerId(data.id);
+            setCurrentPlayerId(data.players[0].id);
             setGameId(data.game_id);
         });
     }
@@ -36,7 +37,7 @@ const App = () => {
         let body = {
             score: scoreInput,
             gameId: gameId,
-            playerId: playerId
+            currentPlayerId: currentPlayerId
         }
         fetch('http://localhost:3000/players', {
             method: "POST",
@@ -123,18 +124,17 @@ const App = () => {
     }
 
     const resetGame = () => {
-        setPlayerId('');
+        setCurrentPlayerId('');
         setFrames([]);
         setPlayerName('');
-        setPlayerId('');
         setGameId('')
     }
 
     return (
         <div>
             <div id='title' className='title'>
-                Bowling Scoresheet {playerId === '' ? '' : ` - ${playerName}`}
-                { playerId === '' ?
+                Bowling Scoresheet {gameId === '' ? '' : ` - ${playerName}`}
+                { gameId === '' ?
                     null
                 :
                     <div>
@@ -144,7 +144,7 @@ const App = () => {
                     </div>
                 }
                 
-                { playerId === '' ?
+                { gameId === '' ?
                     <div>
                         <input type="text" placeholder="Enter Name" value={playerName} name="name" onChange={e => setPlayerName(e.target.value)}/>
                         <button className="button" type="button" onClick={newGame}>New Game</button>
@@ -154,49 +154,7 @@ const App = () => {
                 }
             </div>
             
-        
-            <div id='scoresheet'>
-                <table id='scoresheetTable' className='scoresheet' cellPadding='1' cellSpacing='0'>
-                    <tbody>
-                        <tr>
-                            <th colSpan='6'>Frame 1</th>
-                            <th colSpan='6'>Frame 2</th>
-                            <th colSpan='6'>Frame 3</th>
-                            <th colSpan='6'>Frame 4</th>
-                            <th colSpan='6'>Frame 5</th>
-                            <th colSpan='6'>Frame 6</th>
-                            <th colSpan='6'>Frame 7</th>
-                            <th colSpan='6'>Frame 8</th>
-                            <th colSpan='6'>Frame 9</th>
-                            <th colSpan='6'>Frame 10</th>
-                        </tr>
-                        <tr>
-                            <td colSpan='3'>{renderShot(0, true)}</td><td colSpan='3'>{renderShot(0, false)}</td>
-                            <td colSpan='3'>{renderShot(1, true)}</td><td colSpan='3'>{renderShot(1, false)}</td>
-                            <td colSpan='3'>{renderShot(2, true)}</td><td colSpan='3'>{renderShot(2, false)}</td>
-                            <td colSpan='3'>{renderShot(3, true)}</td><td colSpan='3'>{renderShot(3, false)}</td>
-                            <td colSpan='3'>{renderShot(4, true)}</td><td colSpan='3'>{renderShot(4, false)}</td>
-                            <td colSpan='3'>{renderShot(5, true)}</td><td colSpan='3'>{renderShot(5, false)}</td>
-                            <td colSpan='3'>{renderShot(6, true)}</td><td colSpan='3'>{renderShot(6, false)}</td>
-                            <td colSpan='3'>{renderShot(7, true)}</td><td colSpan='3'>{renderShot(7, false)}</td>
-                            <td colSpan='3'>{renderShot(8, true)}</td><td colSpan='3'>{renderShot(8, false)}</td>
-                            <td colSpan='2'>{renderFinalShot(9, 1)}</td><td colSpan='2'>{renderFinalShot(9, 2)}</td><td colSpan='2'>{renderFinalShot(9, 3)}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan='6'>{renderScore(0)}</td>
-                            <td colSpan='6'>{renderScore(1)}</td>
-                            <td colSpan='6'>{renderScore(2)}</td>
-                            <td colSpan='6'>{renderScore(3)}</td>
-                            <td colSpan='6'>{renderScore(4)}</td>
-                            <td colSpan='6'>{renderScore(5)}</td>
-                            <td colSpan='6'>{renderScore(6)}</td>
-                            <td colSpan='6'>{renderScore(7)}</td>
-                            <td colSpan='6'>{renderScore(8)}</td>
-                            <td colSpan='6'>{renderFinalScore(9)}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                <Scoresheet renderFinalScore={renderFinalScore} renderFinalShot={renderFinalShot} renderScore={renderScore} renderShot={renderShot}/>
         </div>
     );
 };
